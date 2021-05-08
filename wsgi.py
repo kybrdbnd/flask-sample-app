@@ -2,7 +2,7 @@ import json
 
 from flasgger import Swagger
 
-from main import app
+from employee_management import app
 
 with open('configs/app_config.json', 'r') as f:
     template = json.load(f)

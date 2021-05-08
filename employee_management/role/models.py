@@ -1,4 +1,4 @@
-from main import db, ma
+from employee_management import db, ma
 
 # clear db metadata object
 db.metadata.clear()
