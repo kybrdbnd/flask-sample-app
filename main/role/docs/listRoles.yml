@@ -1,0 +1,17 @@
+Example endpoint returning a list of roles in a company
+---
+tags:
+  - List Roles
+definitions:
+  Role:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+responses:
+  200:
+    description: A list of roles
+    schema:
+      $ref: '#/definitions/Role'

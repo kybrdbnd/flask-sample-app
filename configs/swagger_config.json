@@ -1,0 +1,13 @@
+{
+    "headers": [
+    ],
+    "specs": [
+        {
+            "endpoint": "docs",
+            "route": "/docs.json"
+        }
+    ],
+    "static_url_path": "/flasgger_static",
+    "swagger_ui": true,
+    "specs_route": "/docs/"
+}
