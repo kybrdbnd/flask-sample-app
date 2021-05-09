@@ -10,25 +10,19 @@ class Employee(db.Model):
     name = db.Column(db.String())
     email = db.Column(db.String())
 
-
-class EmployeeSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'name', 'email')
+    def __repr__(self):
+        return f'<Employee> {self.name}'
 
 
-employee_schema = EmployeeSchema()
-employees_schema = EmployeeSchema(many=True)
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<Role> {self.name}'
+
 
 if __name__ == "__main__":
     db.create_all()
-    emp1 = Employee(
-        name="Paul John", email="pj@gmail.com"
-    )
-    emp2 = Employee(
-        name="John Doe", email="JD@gmail.com"
-    )
-    emp3 = Employee(
-        name="John Pop", email="JP@gmail.com"
-    )
-    db.session.add_all([emp1, emp2, emp3])
-    db.session.commit()
+
