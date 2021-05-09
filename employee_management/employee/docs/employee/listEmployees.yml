@@ -1,7 +1,7 @@
 Example endpoint returning a list of employees in a company
 ---
 tags:
-  - List Employee
+  - Employee
 definitions:
   Employee:
     type: array

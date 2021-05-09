@@ -1,0 +1,27 @@
+Example endpoint to update employee of the company
+---
+tags:
+  - Employee
+parameters:
+  - name: empId
+    description: EmployeeId
+    in: path
+    type: integer
+    required: true
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+responses:
+  200:
+    description: Employee Updated
+  404:
+    description: Employee not found

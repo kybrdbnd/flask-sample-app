@@ -1,0 +1,21 @@
+Example endpoint to create employee of the company
+---
+tags:
+  - Employee
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+responses:
+  201:
+    description: Employee Created

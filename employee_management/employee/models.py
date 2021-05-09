@@ -9,6 +9,14 @@ class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     email = db.Column(db.String())
+    nameSlug = db.Column(db.String())
+
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        nameObjs = self.name.split(' ')
+        nameObjs = list(map(lambda x: x.lower(), nameObjs))
+        self.nameSlug = '-'.join(nameObjs)
 
     def __repr__(self):
         return f'<Employee> {self.name}'
@@ -25,4 +33,3 @@ class Role(db.Model):
 
 if __name__ == "__main__":
     db.create_all()
-

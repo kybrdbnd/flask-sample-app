@@ -1,0 +1,15 @@
+Example endpoint to delete employee from the company
+---
+tags:
+  - Employee
+parameters:
+  - name: empId
+    description: EmployeeId
+    in: path
+    type: integer
+    required: true
+responses:
+  204:
+    description: Employee Deleted
+  404:
+    description: Employee not found

@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
-from flask_script import Manager, prompt_bool
+from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 import os
@@ -24,6 +24,14 @@ from database import manager as database_manager
 
 manager.add_command('db', MigrateCommand)
 manager.add_command("database", database_manager)
+
+
+@app.route('/')
+def welcome():
+    return {
+        "message": "this is a sample api for flutter application"
+    }
+
 
 from .employee import emp
 

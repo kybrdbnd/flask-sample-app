@@ -16,3 +16,4 @@ roles_schema = RoleSchema(many=True)
 
 employee_schema = EmployeeSchema()
 employees_schema = EmployeeSchema(many=True)
+employee_get_schema = EmployeeSchema()

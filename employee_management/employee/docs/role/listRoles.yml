@@ -1,7 +1,7 @@
 Example endpoint returning a list of roles in a company
 ---
 tags:
-  - List Roles
+  - Role
 definitions:
   Role:
     type: array

@@ -1,0 +1,27 @@
+Example endpoint to get employee from the company
+---
+tags:
+  - Employee
+parameters:
+  - name: empId
+    description: EmployeeId
+    in: path
+    type: integer
+    required: true
+definitions:
+  Employee:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+responses:
+  200:
+    description: Employee Detail
+    schema:
+      $ref: '#/definitions/Employee'
+  404:
+    Description: Employee not found

@@ -1,0 +1,15 @@
+Example endpoint to delete role of the company
+---
+tags:
+  - Role
+parameters:
+  - name: roleId
+    description: RoleId
+    in: path
+    type: integer
+    required: true
+responses:
+  204:
+    description: Role Deleted
+  404:
+    description: Role Not Found

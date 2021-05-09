@@ -1,0 +1,25 @@
+Example endpoint to update role of the company
+---
+tags:
+  - Role
+parameters:
+  - name: roleId
+    description: RoleId
+    in: path
+    type: integer
+    required: true
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+responses:
+  200:
+    description: Role Updated
+  404:
+    description: Role Not Found
