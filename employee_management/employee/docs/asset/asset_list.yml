@@ -1,0 +1,20 @@
+Example endpoint returning a assets in a company
+---
+tags:
+  - Asset
+definitions:
+  Asset:
+    type: object
+    properties:
+      name:
+        type: string
+      id:
+        type: integer
+responses:
+  200:
+    description: A list of assets
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Asset'
+

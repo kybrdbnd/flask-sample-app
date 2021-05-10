@@ -27,8 +27,23 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
 
+    def __init__(self, name):
+        self.name = name
+
     def __repr__(self):
         return f'<Role> {self.name}'
+
+
+class Asset(db.Model):
+    __tablename__ = 'assets'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), unique=True, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return f'<Asset> {self.name}'
 
 
 if __name__ == "__main__":

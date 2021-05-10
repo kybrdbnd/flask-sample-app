@@ -4,14 +4,14 @@ tags:
   - Role
 definitions:
   Role:
-    type: array
-    items:
-      type: object
-      properties:
-        name:
-          type: string
+    type: object
+    properties:
+      name:
+        type: string
 responses:
   200:
     description: A list of roles
     schema:
-      $ref: '#/definitions/Role'
+      type: array
+      items:
+        $ref: '#/definitions/Role'

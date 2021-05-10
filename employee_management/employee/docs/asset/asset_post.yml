@@ -1,0 +1,18 @@
+Example endpoint to create asset for the company
+---
+tags:
+  - Asset
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+responses:
+  201:
+    description: Asset Created

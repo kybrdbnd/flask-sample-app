@@ -8,16 +8,6 @@ parameters:
     in: path
     type: integer
     required: true
-definitions:
-  Employee:
-    type: object
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      email:
-        type: string
 responses:
   200:
     description: Employee Detail

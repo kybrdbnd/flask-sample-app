@@ -2,13 +2,13 @@ from flasgger import swag_from
 from flask import jsonify, request
 from . import emp
 from .controller.employeeController import update_name_slug
-from .models import Employee, Role
-from .schema import employees_schema, roles_schema, employee_get_schema
+from .models import Employee, Role, Asset
+from .schema import employees_schema, roles_schema, assets_schema, employee_schema
 from .. import db
 
 
 @emp.route('/', methods=['POST', 'GET'])
-@swag_from('docs/employee/listEmployees.yml', methods=['GET'])
+@swag_from('docs/employee/employee_list.yml', methods=['GET'])
 @swag_from('docs/employee/employee_post.yml', methods=['POST'])
 def list_create_employees():
     if request.method == 'GET':
@@ -23,15 +23,15 @@ def list_create_employees():
 
 
 @emp.route('/<empId>', methods=['GET', 'DELETE', 'PUT'])
-@swag_from('docs/employee/employeeCRUD.yml', methods=['GET'])
-@swag_from('docs/employee/employeeCRUD_delete.yml', methods=['DELETE'])
-@swag_from('docs/employee/employeeCRUD_put.yml', methods=['PUT'])
+@swag_from('docs/employee/employee_get.yml', methods=['GET'])
+@swag_from('docs/employee/employee_delete.yml', methods=['DELETE'])
+@swag_from('docs/employee/employee_put.yml', methods=['PUT'])
 def employeesCrud(empId):
     if request.method == 'GET':
         employee = Employee.query.get(empId)
         if employee is None:
             return {"message": "employee not found"}, 404
-        return jsonify(employee_get_schema.dump(employee))
+        return jsonify(employee_schema.dump(employee))
     if request.method == 'DELETE':
         employee = Employee.query.get(empId)
         if employee is not None:
@@ -52,7 +52,7 @@ def employeesCrud(empId):
             return {"message": "employee not found"}, 404
 
 
-@emp.route('/search/<empName>', methods=['GET'])
+@emp.route('/<empName>/search', methods=['GET'])
 @swag_from('docs/employee/employee_search.yml')
 def employeeSearch(empName):
     employees = list(Employee.query.filter(Employee.nameSlug.contains(empName)))
@@ -62,11 +62,19 @@ def employeeSearch(empName):
         return jsonify([]), 404
 
 
-@emp.route('/roles')
-@swag_from('docs/role/listRoles.yml')
-def get_roles():
-    roles = Role.query.all()
-    return jsonify(roles_schema.dump(roles))
+@emp.route('/roles', methods=['GET', 'POST'])
+@swag_from('docs/role/role_list.yml', methods=['GET'])
+@swag_from('docs/role/role_post.yml', methods=['POST'])
+def emp_roles():
+    if request.method == 'GET':
+        roles = Role.query.all()
+        return jsonify(roles_schema.dump(roles))
+    if request.method == 'POST':
+        data = request.json
+        role = Role(data['name'])
+        db.session.add(role)
+        db.session.commit()
+        return {"message": "Role created successfully"}, 201
 
 
 @emp.route('/roles/<roleId>', methods=['PUT', 'DELETE'])
@@ -90,3 +98,18 @@ def roles_update(roleId):
             return {}, 204
         else:
             return {"message": "role not found"}, 404
+
+
+@emp.route('/assets', methods=['GET', 'POST'])
+@swag_from('docs/asset/asset_list.yml', methods=['GET'])
+@swag_from('docs/asset/asset_post.yml', methods=['POST'])
+def emp_assets():
+    if request.method == 'GET':
+        assets = Asset.query.all()
+        return jsonify(assets_schema.dump(assets))
+    if request.method == 'POST':
+        data = request.json
+        asset = Asset(data['name'])
+        db.session.add(asset)
+        db.session.commit()
+        return {"message": "asset created successfully"}, 201
