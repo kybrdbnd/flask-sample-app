@@ -4,7 +4,7 @@ tags:
   - Employee
 parameters:
   - name: empId
-    description: EmployeeId
+    description: id of the employee
     in: path
     type: integer
     required: true

@@ -1,0 +1,17 @@
+Example endpoint to get asset for the company
+---
+tags:
+  - Asset
+parameters:
+  - name: assetId
+    description: id of the asset
+    in: path
+    type: integer
+    required: true
+responses:
+  200:
+    description: Asset Detail
+    schema:
+      $ref: '#/definitions/Asset'
+  404:
+    Description: asset not found

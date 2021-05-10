@@ -1,0 +1,17 @@
+Example endpoint returning a list of employees have that role in a company
+---
+tags:
+  - Role
+parameters:
+  - name: roleId
+    description: id of the role
+    in: path
+    type: integer
+    required: true
+responses:
+  200:
+    description: A list of employees having that role
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Employee'

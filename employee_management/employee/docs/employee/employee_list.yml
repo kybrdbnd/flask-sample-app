@@ -12,6 +12,10 @@ definitions:
         type: string
       email:
         type: string
+      roleId:
+        type: integer
+      roleName:
+        type: string
 responses:
   200:
     description: A list of employees

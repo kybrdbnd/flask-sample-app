@@ -1,0 +1,15 @@
+Example endpoint to delete asset for the company
+---
+tags:
+  - Asset
+parameters:
+  - name: assetId
+    description: id of the asset
+    in: path
+    type: integer
+    required: true
+responses:
+  204:
+    description: Asset Deleted
+  404:
+    description: Asset not found
