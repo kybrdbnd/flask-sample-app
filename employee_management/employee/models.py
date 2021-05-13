@@ -18,11 +18,10 @@ class Employee(db.Model):
     roleId = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
     assets = db.relationship('Asset', secondary=employee_assets, lazy='subquery',
                              backref=db.backref('employees', lazy=True))
+    role = db.relationship('Role', backref=db.backref('employees', lazy=True))
 
     def __init__(self, **kwargs):
         super(Employee, self).__init__(**kwargs)
-        if 'roleId' in kwargs:
-            self.roleId = kwargs['roleId']
         nameObjs = self.name.split(' ')
         nameObjs = list(map(lambda x: x.lower(), nameObjs))
         self.nameSlug = '-'.join(nameObjs)
@@ -36,7 +35,6 @@ class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(), unique=True, nullable=False)
-    employees = db.relationship('Employee', backref='roles', lazy=True)
 
     def __repr__(self):
         return f'<Role> {self.name}'

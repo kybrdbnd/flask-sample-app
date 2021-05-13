@@ -6,6 +6,8 @@ definitions:
   Role:
     type: object
     properties:
+      id:
+        type: integer
       name:
         type: string
 responses:

@@ -1,9 +1,11 @@
 from flasgger import swag_from
 from flask import jsonify, request
+
 from . import emp
 from .controller.employeeController import update_name_slug
 from .models import Employee, Role, Asset
-from .schema import employees_schema, roles_schema, assets_schema, employee_schema, asset_schema
+from .schema import employees_schema, roles_schema, assets_schema, employee_schema, asset_schema, employees_role_schema, \
+    employees_asset_schema, employees_basic_schema
 from .. import db
 
 
@@ -12,11 +14,40 @@ from .. import db
 @swag_from('docs/employee/employee_post.yml', methods=['POST'])
 def list_create_employees():
     if request.method == 'GET':
-        employees = Employee.query.all()
-        return jsonify(employees_schema.dump(employees))
+        if 'includeFields' not in request.args:
+            employees = Employee.query.with_entities(Employee.name, Employee.id, Employee.email)
+            return jsonify(employees_schema.dump(employees))
+        else:
+            employees = Employee.query.all()
+            isRole = False
+            isAssets = False
+            fields = request.args['includeFields'].split(',')
+            for field in fields:
+                field = field.strip(' ')
+                if field == 'role':
+                    isRole = True
+                elif field == 'assets':
+                    isAssets = True
+            if isRole and isAssets is not True:
+                return jsonify(employees_role_schema.dump(employees))
+            elif isAssets and isRole is not True:
+                return jsonify(employees_asset_schema.dump(employees))
+            else:
+                employees = Employee.query.all()
+                return jsonify(employees_schema.dump(employees))
+
     if request.method == 'POST':
         data = request.json
-        employee = Employee(name=data['name'], email=data['email'])
+        employeeJSON = {
+            'name': None,
+            'email': None,
+            'roleId': None
+        }
+        if 'roleId' in data:
+            employeeJSON['roleId'] = data['roleId']
+        employeeJSON['name'] = data['name']
+        employeeJSON['email'] = data['email']
+        employee = Employee(name=employeeJSON['name'], email=employeeJSON['email'], roleId=employeeJSON['roleId'])
         db.session.add(employee)
         db.session.commit()
         return {"message": "employee created successfully"}, 201
@@ -95,7 +126,7 @@ def emp_roles():
     if request.method == 'POST':
         data = request.json
         try:
-            role = Role(data['name'])
+            role = Role(name=data['name'])
             db.session.add(role)
             db.session.commit()
             return {"message": "Role created successfully"}, 201
@@ -130,7 +161,7 @@ def roles_update(roleId):
 @swag_from('docs/role/role_employees.yml', methods=['GET'])
 def role_employees(roleId):
     role = Role.query.get(roleId)
-    return jsonify(employees_schema.dump(role.employees)), 200
+    return jsonify(employees_basic_schema.dump(role.employees)), 200
 
 
 @emp.route('/assets', methods=['GET', 'POST'])
@@ -143,7 +174,7 @@ def emp_assets():
     if request.method == 'POST':
         data = request.json
         try:
-            asset = Asset(data['name'])
+            asset = Asset(name=data['name'])
             db.session.add(asset)
             db.session.commit()
             return {"message": "asset created successfully"}, 201

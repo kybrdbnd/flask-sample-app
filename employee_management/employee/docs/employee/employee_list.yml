@@ -12,10 +12,19 @@ definitions:
         type: string
       email:
         type: string
-      roleId:
-        type: integer
-      roleName:
-        type: string
+      role:
+        type: object
+        $ref: '#/definitions/Role'
+      assets:
+        type: array
+        items:
+          $ref: '#/definitions/Asset'
+parameters:
+  - in: query
+    name: includeFields
+    description: Include fields like role and assets
+    schema:
+      type: string
 responses:
   200:
     description: A list of employees

@@ -17,7 +17,7 @@ parameters:
         email:
           type: string
         roleId:
-          type: string
+          type: integer
 responses:
   201:
     description: Employee Created
