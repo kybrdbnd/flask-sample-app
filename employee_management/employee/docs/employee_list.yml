@@ -25,6 +25,11 @@ parameters:
     description: Include fields like role and assets
     schema:
       type: string
+  - name: Authorization
+    in: header
+    required: true
+    schema:
+      type: string
 responses:
   200:
     description: A list of employees

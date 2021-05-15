@@ -1,5 +1,0 @@
-import os
-
-POSTGRES_USERNAME = os.environ.get('POSTGRES_USERNAME')
-POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
-POSTGRES_DATABASE = os.environ.get('POSTGRES_DATABASE')

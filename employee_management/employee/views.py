@@ -1,15 +1,20 @@
 from flasgger import swag_from
 from flask import jsonify, request
+from flask_cognito import cognito_auth_required, cognito_group_permissions
 
 from . import emp
-from .controller.employeeController import update_name_slug
+from .controller.employeeController import (update_name_slug, authenticate_user, create_cognito_user,
+                                            add_user_cognito_group, confirm_user)
 from .models import Employee
-from .schema import employees_schema, employee_schema, employees_role_schema, employees_asset_schema
+from .schema import (employees_schema, employee_schema, employees_role_schema, employees_asset_schema)
 from .. import db
 from ..asset.models import Asset
+from ..role.models import Role
 
 
 @emp.route('/', methods=['POST', 'GET'])
+@cognito_auth_required
+@cognito_group_permissions(['hr'])
 @swag_from('docs/employee_list.yml', methods=['GET'])
 @swag_from('docs/employee_post.yml', methods=['POST'])
 def list_create_employees():
@@ -47,10 +52,16 @@ def list_create_employees():
             employeeJSON['roleId'] = data['roleId']
         employeeJSON['name'] = data['name']
         employeeJSON['email'] = data['email']
-        employee = Employee(name=employeeJSON['name'], email=employeeJSON['email'], roleId=employeeJSON['roleId'])
+        tempPassword = create_cognito_user(employeeJSON['email'])
+        employee = Employee(name=employeeJSON['name'], email=employeeJSON['email'], roleId=employeeJSON['roleId'],
+                            tempPassword=tempPassword)
         db.session.add(employee)
         db.session.commit()
-        return {"message": "employee created successfully"}, 201
+        if employeeJSON['roleId'] is not None:
+            roleName = Role.query.get(employeeJSON['roleId']).name
+            add_user_cognito_group(employeeJSON['email'], roleName)
+        return {"message": "employee created successfully",
+                "tempPassword": tempPassword, "empId": employee.id}, 201
 
 
 @emp.route('/<empId>', methods=['GET', 'DELETE', 'PUT'])
@@ -116,3 +127,26 @@ def employee_asset(empId, assetId):
             employee.assets.remove(asset)
             db.session.commit()
             return {"message": "asset successfully removed from the employee"}, 200
+
+
+@emp.route('/get_access_token', methods=['POST'])
+@swag_from('docs/access_token.yml', methods=['POST'])
+def get_access_token():
+    data = request.json
+    token = authenticate_user(data['email'], data['password'])
+    return jsonify(token), 200
+
+
+@emp.route('/reset_password', methods=['POST'])
+@swag_from('docs/reset_password.yml', methods=['POST'])
+def reset_password():
+    data = request.json
+    if 'tempPassword' in data and 'empId' in data and 'password' in data:
+        tempPassword = data['tempPassword']
+        empId = data['empId']
+        employee = Employee.query.get(empId)
+        if employee.tempPassword == tempPassword:
+            confirm_user(employee.email, data['password'])
+            return jsonify({"message": "password reset successfully done"}), 200
+    else:
+        return jsonify({"message": "provide tempPassword, password and empId"}), 200

@@ -7,7 +7,7 @@ class Role(db.Model):
     name = db.Column(db.String(), unique=True, nullable=False)
 
     def __repr__(self):
-        return f'<Role> {self.name}'
+        return self.name
 
 
 if __name__ == "__main__":

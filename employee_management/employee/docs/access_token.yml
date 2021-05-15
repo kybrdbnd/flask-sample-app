@@ -1,0 +1,21 @@
+Example endpoint to get access token
+---
+tags:
+  - Employee
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+responses:
+  200:
+    description: Access token granted

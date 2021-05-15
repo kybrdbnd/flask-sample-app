@@ -1,8 +1,6 @@
 from employee_management import db
 
 # clear db metadata object
-from employee_management.asset.models import Asset
-from employee_management.role.models import Role
 
 db.metadata.clear()
 
@@ -10,6 +8,9 @@ employee_assets = db.Table('employee_assets',
                            db.Column('assetId', db.Integer, db.ForeignKey('assets.id'), primary_key=True),
                            db.Column('employeeId', db.Integer, db.ForeignKey('employees.id'), primary_key=True)
                            )
+
+from employee_management.asset.models import Asset
+from employee_management.role.models import Role
 
 
 class Employee(db.Model):
@@ -22,6 +23,7 @@ class Employee(db.Model):
     assets = db.relationship('Asset', secondary=employee_assets, lazy='subquery',
                              backref=db.backref('employees', lazy=True))
     role = db.relationship('Role', backref=db.backref('employees', lazy=True))
+    tempPassword = db.Column(db.String())
 
     def __init__(self, **kwargs):
         super(Employee, self).__init__(**kwargs)
