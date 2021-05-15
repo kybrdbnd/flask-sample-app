@@ -1,0 +1,20 @@
+Example endpoint to remove asset of the employee of the company
+---
+tags:
+  - Employee
+parameters:
+  - name: empId
+    description: Id of the employee
+    in: path
+    type: integer
+    required: true
+  - name: assetId
+    description: Id of the asset to be added
+    in: path
+    type: integer
+    required: true
+responses:
+  204:
+    description: Asset Deleted
+  404:
+    description: Asset or Employee not found

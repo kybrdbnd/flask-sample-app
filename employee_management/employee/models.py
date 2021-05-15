@@ -1,6 +1,9 @@
 from employee_management import db
 
 # clear db metadata object
+from employee_management.asset.models import Asset
+from employee_management.role.models import Role
+
 db.metadata.clear()
 
 employee_assets = db.Table('employee_assets',
@@ -29,24 +32,6 @@ class Employee(db.Model):
 
 def __repr__(self):
     return f'<Employee> {self.name}'
-
-
-class Role(db.Model):
-    __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), unique=True, nullable=False)
-
-    def __repr__(self):
-        return f'<Role> {self.name}'
-
-
-class Asset(db.Model):
-    __tablename__ = 'assets'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), unique=True, nullable=False)
-
-    def __repr__(self):
-        return f'<Asset> {self.name}'
 
 
 if __name__ == "__main__":

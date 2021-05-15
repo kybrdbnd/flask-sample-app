@@ -1,5 +1,5 @@
 from employee_management import db
-from employee_management.employee.models import Role
+from employee_management.role.models import Role
 
 
 def setup():

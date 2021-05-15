@@ -34,5 +34,9 @@ def welcome():
 
 
 from .employee import emp
+from .asset import asset
+from .role import role
 
 app.register_blueprint(emp)
+app.register_blueprint(asset)
+app.register_blueprint(role)

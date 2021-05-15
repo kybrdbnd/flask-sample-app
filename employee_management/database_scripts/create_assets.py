@@ -1,5 +1,5 @@
 from employee_management import db
-from employee_management.employee.models import Asset
+from employee_management.asset.models import Asset
 
 
 def setup():
